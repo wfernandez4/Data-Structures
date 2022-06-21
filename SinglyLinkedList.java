@@ -8,7 +8,7 @@
  * Music players, browsing between web pages, image viewers, switching between two applications (circular), version control (doubly linked).
  * Disadvantages:
  * Uses more memory for pointers, searching for elements is costly (lookup in arrays is O(1)), reverse traversing in singly LinkedLists is not possible,
- * data is not stored in contiguous locations in memory.
+ * data is not stored in contiguous locations in memory, random access is not allowed.
   */
 
 class LinkedList {
@@ -37,6 +37,39 @@ class LinkedList {
             currentNode = currentNode.next;
         }
         System.out.println();
+    }
+    // Iteratively counts the nodes in a LinkedList O(n)
+    static void countNodes(LinkedList list) {
+        if (checkIfEmpty(list)) System.out.println("The LinkedList is empty.");
+        else {
+            Node currentNode = list.head;
+            int count = 1;
+            while (currentNode.next != null) {
+                count++;
+                currentNode = currentNode.next;
+            }
+            System.out.println("LinkedList length is: " + count);
+        }
+    }
+    // Helper function for the main recursive method
+    // This will handles cases where recursion is not needed
+    static void recursivelyCountNodes(LinkedList list) {
+        int count = 0;
+        if (list.head == null) {
+            System.out.println("The LinkedList is empty.");
+        } else {
+            Node traverseNode = list.head;
+            count = recursionCountNodes(list, traverseNode, count);
+        }
+        System.out.println("LinkedList length is: " + count);
+    }
+    // Recursive method for counting the Nodes in a Linkedlist O(n)
+    static int recursionCountNodes(LinkedList list, Node traversingNode, int count) {
+        if (traversingNode == null) { // Base case
+            return 0;
+        } else { // Recursive case
+            return 1 + recursionCountNodes(list, traversingNode.next, count++);
+        }
     }
     // Inserts a node at the beginning of the list O(1)
     static void insertNewHead(LinkedList list, Node node) {
@@ -134,6 +167,8 @@ class LinkedList {
         printLinkedList(ll);
         deleteNodeRecursively(ll, 2);
         printLinkedList(ll);
+        countNodes(ll);
+        recursivelyCountNodes(ll);
     }
 }
 
