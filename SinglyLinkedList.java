@@ -1,3 +1,5 @@
+import java.util.HashSet;
+
 /* What are LinkedLists good for?
  * LinkedLists are good because of their efficient insertion and deletion times.
  * If we have a pointer to a Node in a LinkedList, we can effectively insert and delete elements in O(1) time.
@@ -63,7 +65,9 @@ class LinkedList {
         }
         System.out.println("LinkedList length is: " + count);
     }
-    // Recursive method for counting the Nodes in a Linkedlist O(n)
+    // Recursive method for counting the Nodes in a Linkedlist
+    // Time complexity: O(n)
+    // Space complexity: O(n)
     static int recursionCountNodes(LinkedList list, Node traversingNode, int count) {
         if (traversingNode == null) { // Base case
             return 0;
@@ -142,14 +146,46 @@ class LinkedList {
         }
     }
 
+    // Check if the LinkedList contains a loop O(n)
+    // This method uses a hash table and takes O(1) auxiliary space
+    static boolean containsLoop(LinkedList list) {
+        if (checkIfEmpty(list)) return false;
+        HashSet<Node> set = new HashSet<Node>();
+        Node currentNode = list.head;
+        while (currentNode != null) {
+            if (set.contains(currentNode)) return true;
+            set.add(currentNode);
+            currentNode = currentNode.next;    
+        }
+        return false;
+    }
+    // Check if the LinkedList contains a loop O(n)
+    // This method uses flags to denote whether a Node has been visited
+    static boolean containsLoopFlagged(LinkedList list) {
+        if (checkIfEmpty(list)) return false;
+        Node currentNode = list.head;
+        currentNode.visited = true;
+        while (currentNode.next != null) {
+            currentNode = currentNode.next;
+            if (currentNode.visited == true) return true;
+            currentNode.visited = true;
+        }
+        return false;
+    }
+
+    
+
+
     static class Node {
         int data;
         Node next;
+        Boolean visited;
 
         // Constructor for a Node with a passed value
         Node(int n) {
             data = n;
             next = null;
+            visited = false;
         }
         // Constructor for an empty Node
         Node() {
@@ -164,11 +200,7 @@ class LinkedList {
         appendNode(ll, node1);
         appendNode(ll, node2);
         appendNode(ll, node3);
-        printLinkedList(ll);
-        deleteNodeRecursively(ll, 2);
-        printLinkedList(ll);
-        countNodes(ll);
-        recursivelyCountNodes(ll);
+        System.out.println(containsLoopFlagged(ll));
     }
 }
 
