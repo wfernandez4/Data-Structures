@@ -64,46 +64,58 @@ class LinkedList {
                     currentNode = currentNode.next;
                 }
             }
-            
             if (currentNode.data == key) previousNode.next = currentNode.next;
             else return; 
+        }
+    }
+    
+    // Helper function for the recursive version of Node deletion
+    static void deleteNodeRecursively(LinkedList list, int key) {
+        if (list.head.data == key) {
+            list.head = list.head.next;
+        } else if (list.head == null) {
+            System.out.println("LinkedList is empty.");
+        } else {
+            Node prevNode = new Node();
+            deleteNodeRecursion(list, key, prevNode, list.head);
+        }
+
+    }
+    // Recursive function for Node deletion O(n)
+    static void deleteNodeRecursion(LinkedList list, int key, Node prevNode, Node traversingNode) {
+        if (traversingNode == null) { // Base case 1 (It is important to handle this case first)
+            return;
+        } else if (traversingNode.data == key) { // Base case 2
+            prevNode.next = traversingNode.next;
+        } else { // Recursive case
+            deleteNodeRecursion(list, key, traversingNode, traversingNode.next);
         }
     }
 
     static class Node {
         int data;
         Node next;
-        // Constructor for Node
+        
+        // Constructor for a Node with a passed value
         Node(int n) {
             data = n;
             next = null;
+        }
+        // Constructor for an empty Node
+        Node() {
         }
     }
 
     public static void main(String[] args) {
         LinkedList ll = new LinkedList();
-        Node node0 = new Node(0);
         Node node1 = new Node(1);
         Node node2 = new Node(2);
         Node node3 = new Node(3);
-        Node node4 = new Node(4);
         appendNode(ll, node1);
         appendNode(ll, node2);
-        appendNode(ll, node4);
+        appendNode(ll, node3);
         printLinkedList(ll);
-        insertNewHead(ll, node0);
-        printLinkedList(ll);
-        insertNode(node2, node3);
-        printLinkedList(ll);
-        deleteNode(ll, 3);
-        printLinkedList(ll);
-        deleteNode(ll, 0);
-        printLinkedList(ll);
-        deleteNode(ll, 4);
-        printLinkedList(ll);
-        deleteNode(ll, 1);
-        printLinkedList(ll);
-        deleteNode(ll,2);
+        deleteNodeRecursively(ll, 2);
         printLinkedList(ll);
     }
 }
