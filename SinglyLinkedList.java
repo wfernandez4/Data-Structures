@@ -1,3 +1,16 @@
+/* What are LinkedLists good for?
+ * LinkedLists are good because of their efficient insertion and deletion times.
+ * If we have a pointer to a Node in a LinkedList, we can effectively insert and delete elements in O(1) time.
+ * LinkedLists have uses for stacks, queues, and other abstract data structures. Can represent trees and graphs.
+ * Other characteristics:
+ * Dynamic memory allocation, sparse matrices, manipulation of polynomials, performing arithmetic operations on long integers, finding paths in networks.
+ * Applications:
+ * Music players, browsing between web pages, image viewers, switching between two applications (circular), version control (doubly linked).
+ * Disadvantages:
+ * Uses more memory for pointers, searching for elements is costly (lookup in arrays is O(1)), reverse traversing in singly LinkedLists is not possible,
+ * data is not stored in contiguous locations in memory.
+  */
+
 class LinkedList {
     Node head;
     // Empty LinkedList constructor
@@ -31,6 +44,7 @@ class LinkedList {
         list.head = node;
     }
     // Appends a node to the end of the list O(n)
+    // O(1) time if we keep a pointer to the tail
     static void appendNode(LinkedList list, Node node) {
         if (list.head == null) {
             list.head = node;
@@ -70,6 +84,7 @@ class LinkedList {
     }
     
     // Helper function for the recursive version of Node deletion
+    // This will handle cases where recursion is not needed
     static void deleteNodeRecursively(LinkedList list, int key) {
         if (list.head.data == key) {
             list.head = list.head.next;
@@ -81,7 +96,9 @@ class LinkedList {
         }
 
     }
-    // Recursive function for Node deletion O(n)
+    // Recursive function for Node deletion 
+    // Time complexity: O(n)
+    // Space complexity: O(n)
     static void deleteNodeRecursion(LinkedList list, int key, Node prevNode, Node traversingNode) {
         if (traversingNode == null) { // Base case 1 (It is important to handle this case first)
             return;
@@ -95,7 +112,7 @@ class LinkedList {
     static class Node {
         int data;
         Node next;
-        
+
         // Constructor for a Node with a passed value
         Node(int n) {
             data = n;
