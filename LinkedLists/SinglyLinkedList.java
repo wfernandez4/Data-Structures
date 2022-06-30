@@ -294,6 +294,7 @@ class LinkedList {
 
     // Determine where the intersection between two lists are by using flags
     // Assume that there is always an intersection between any two given lists
+    // This will require a modification to the data structure
     // Time complexity O(m+n)
     // Space complexity O(1)
     static Node mergePoint3(LinkedList list1, LinkedList list2) {
@@ -314,32 +315,105 @@ class LinkedList {
     }
 
 
-    // Determine where the intersection between two lists are by using flags
+    // Determine where the intersection between two lists are by
+    // creating a loop in the first list and using a slow and a fast pointer
     // Assume that there is always an intersection between any two given lists
     // Time complexcity ()
     static Node mergePoint4(LinkedList list1, LinkedList list2) {
-        Node runner1 = list1.head;
-        while (runner1.next != null) {
-            runner1 = runner1.next;
+        Node curr = list1.head;
+        while (curr.next != null) {
+            curr = curr.next;
         }
-        runner1.next = list1.head;
-
-        Node fastPointer = list2.head;
-        Node slowPointer = list1.head;
-
-        while (slowPointer != fastPointer) {
-            slowPointer = slowPointer.next;
-            fastPointer = fastPointer.next.next;
+        curr.next = list1.head;
+        Node fast = list1.head;
+        Node slow = list1.head;
+        while (fast != slow) {
+            fast = fast.next.next;
+            slow = slow.next;
+        } 
+        fast = list2.head;
+        while (fast != slow) {
+            fast = fast.next;
+            slow = slow.next;
         }
-
-        while (slowPointer.next != fastPointer.next) {
-            slowPointer = slowPointer.next;
-            fastPointer = fastPointer.next;
-        }
-
-        return slowPointer.next;
+        return slow;
     }
 
+
+    // Determine where the intersection between two lists are by using two pointers
+    // moving at the same speed. When either of the pointers reach the end, restart
+    // it at the end of the other list. They will eventually meet at the intersection 
+    // point.
+    // Assume that there is always an intersection between any two given lists
+    static Node mergePoint5(LinkedList list1, LinkedList list2) {
+        Node runner1 = list1.head;
+        Node runner2 = list2.head;
+        while (runner1 != runner2) {
+            if (runner1.next == null) {
+                runner1 = list2.head;
+                runner2 = runner2.next;
+            } else if (runner2.next == null) {
+                runner2 = list1.head;
+                runner1 = runner1.next;
+            }  else {
+                runner1 = runner1.next;
+                runner2 = runner2.next;
+            }
+        }
+        return runner1;
+
+    }
+
+
+    // !
+    // static LinkedList sortedIntersection(LinkedList list1, LinkedList list2) {
+    // }
+
+    // Find the kth to last element recursively (returns the node value, not the actual node)
+    // Time complexity: O(n)
+    // Space complexity: O(n)
+    static int findKthRec1(Node head, int k) {
+        if (head == null) {
+            return 0;
+        } else {
+            int pos = findKthRec1(head.next, k) + 1;
+            if (pos == k) {
+                System.out.println("The " + k + "th to last element has a value of " + head.data);
+            }
+            return pos;
+        }
+    }
+
+
+    // Find the kth to last element recursively (returns the actual node)
+    // Set class of index to keep a static reference to variable since we can only return one type
+    // of vlaue for the recursive function
+    // Time complexity: O(n)
+    // Space complexity: O(n)
+    static class Index {
+        int index = 0;
+        Index(int i) {
+            index = i;
+        }
+     }
+
+    static Node findKthRec2(Node head, int k) {
+        Index i = new Index(0);
+        return findKthRec2(head, k, i);
+    }
+
+    static Node findKthRec2(Node head, int k, Index i) {
+        if (head == null) {
+            return null;
+        } else {
+            Node node = findKthRec2(head.next, k, i);
+            i.index++;
+            if (i.index == k) {
+                return head;
+            }
+            return node;
+        }
+    }
 
 
     static class Node {
@@ -377,17 +451,12 @@ class LinkedList {
         appendNode(l1, node6);
         printLinkedList(l1);
 
-        appendNode(l2, new Node(1));
-        appendNode(l2, new Node(2));
-        appendNode(l2, new Node(3));
-        appendNode(l2, new Node(4));
-        appendNode(l2, new Node(5));
-        appendNode(l2, node6);
 
-        printLinkedList(l2);
+        System.out.println(findKthRec2(node1, 3).data);
+
+        
 
 
-        System.out.println(mergePoint4(l1, l2).data);
 
 
     }
