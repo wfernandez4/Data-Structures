@@ -53,6 +53,16 @@ class LinkedList {
         System.out.println();
     }
 
+    // Prints the LinkedList with a given node
+    static void printNodes(Node head) {
+        Node currentNode = head;
+        while (currentNode != null) {
+            System.out.print(currentNode.data + " ");
+            currentNode = currentNode.next;
+        }
+        System.out.println();
+    }
+
     // Inserts a node at the beginning of the list
     static void insertNewHead(LinkedList list, Node node) {
         node.next = list.head;
@@ -249,6 +259,108 @@ class LinkedList {
         }
     }
 
+    // Find the kth to last element recursively (returns the node value, not the actual node)
+    // Time complexity: O(n)
+    // Space complexity: O(n)
+    static int findKthRec1(Node head, int k) {
+        if (head == null) {
+            return 0;
+        } else {
+            int pos = findKthRec1(head.next, k) + 1;
+            if (pos == k) {
+                System.out.println("The " + k + "th to last element has a value of " + head.data);
+            }
+            return pos;
+        }
+    }
+
+    // Find the kth to last element recursively (returns the actual node)
+    // Set class of index to keep a static reference to variable since we can only return one type
+    // of vlaue for the recursive function
+    // Time complexity: O(n)
+    // Space complexity: O(n)
+    static class Index {
+        int index = 0;
+        Index(int i) {
+            index = i;
+        }
+     }
+
+    static Node findKthRec2(Node head, int k) {
+        Index i = new Index(0);
+        return findKthRec2(head, k, i);
+    }
+
+    static Node findKthRec2(Node head, int k, Index i) {
+        if (head == null) {
+            return null;
+        } else {
+            Node node = findKthRec2(head.next, k, i);
+            i.index++;
+            if (i.index == k) {
+                return head;
+            }
+            return node;
+        }
+    }
+   
+    // Delete the middle node given ONLY the refernece to that particular node
+    // Time complexity: O(n)
+    // Space complexity: 
+    static void deleteMiddleNode(Node node) {
+        Node next;
+        while (node != null) {
+            next = node.next;
+            if (next == null) {
+                break;
+            } else {
+                node.data = next.data;
+                if (next.next == null) {
+                    node.next = null;
+                    break;
+                } else {
+                    node = next;
+                }
+            }
+        }
+    }
+
+    // ?????
+    static Node partition(Node node, int x) {
+        Node beforeStart = null;
+        Node beforeEnd = null;
+        Node afterStart = null;
+        Node afterEnd = null;
+       
+
+        while (node != null) {
+            Node next = node.next;
+            node.next = null;
+            if (node.data < x) {
+                if (beforeStart == null) {
+                    beforeStart = node;
+                    beforeEnd = beforeStart;
+                } else {
+                    beforeEnd.next = node;
+                    beforeEnd = node;
+                }
+            } else {
+                if (afterStart == null) {
+                    afterStart = node;
+                    afterEnd = afterStart;
+                } else {
+                    afterStart.next = node;
+                    afterEnd = node;
+                }
+            }
+            node = next;
+        }
+
+        beforeEnd.next = afterStart;
+        return beforeStart;
+    
+    }
+
     // For each next element in list1, find the matching next element in list2
     // Assume that there is always an intersection between the two lists.
     // Time complexity: O(n*m)
@@ -364,58 +476,6 @@ class LinkedList {
 
     }
 
-
-    // !
-    // static LinkedList sortedIntersection(LinkedList list1, LinkedList list2) {
-    // }
-
-    // Find the kth to last element recursively (returns the node value, not the actual node)
-    // Time complexity: O(n)
-    // Space complexity: O(n)
-    static int findKthRec1(Node head, int k) {
-        if (head == null) {
-            return 0;
-        } else {
-            int pos = findKthRec1(head.next, k) + 1;
-            if (pos == k) {
-                System.out.println("The " + k + "th to last element has a value of " + head.data);
-            }
-            return pos;
-        }
-    }
-
-
-    // Find the kth to last element recursively (returns the actual node)
-    // Set class of index to keep a static reference to variable since we can only return one type
-    // of vlaue for the recursive function
-    // Time complexity: O(n)
-    // Space complexity: O(n)
-    static class Index {
-        int index = 0;
-        Index(int i) {
-            index = i;
-        }
-     }
-
-    static Node findKthRec2(Node head, int k) {
-        Index i = new Index(0);
-        return findKthRec2(head, k, i);
-    }
-
-    static Node findKthRec2(Node head, int k, Index i) {
-        if (head == null) {
-            return null;
-        } else {
-            Node node = findKthRec2(head.next, k, i);
-            i.index++;
-            if (i.index == k) {
-                return head;
-            }
-            return node;
-        }
-    }
-
-
     static class Node {
         int data;
         Node next;
@@ -443,20 +503,15 @@ class LinkedList {
         Node node5 = new Node(5);
         Node node6 = new Node(6);
         
-        appendNode(l1, node1);
-        appendNode(l1, node2);
-        appendNode(l1, node3);
-        appendNode(l1, node4);
-        appendNode(l1, node5);
         appendNode(l1, node6);
+        appendNode(l1, node5);
+        appendNode(l1, node4);
+        appendNode(l1, node3);
+        appendNode(l1, node2);
+        appendNode(l1, node1);
         printLinkedList(l1);
 
-
-        System.out.println(findKthRec2(node1, 3).data);
-
-        
-
-
+        printNodes(partition(node6, 3));
 
 
     }
