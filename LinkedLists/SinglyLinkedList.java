@@ -493,6 +493,13 @@ class LinkedList {
 
     }
 
+    // Given two sorted LinkedLists, find the intersection  of the two (the common node values)
+    // Time complexity: O(n+m)
+    static class sortedIntersection(LinkedList list1, linkedList list2) {
+
+    }
+
+
     public static void main(String[] args) {
         LinkedList l2 = new LinkedList();
         LinkedList l1 = new LinkedList();
@@ -502,6 +509,9 @@ class LinkedList {
         Node node4 = new Node(4);
         Node node5 = new Node(5);
         Node node6 = new Node(6);
+
+
+          
         
         appendNode(l1, node6);
         appendNode(l1, node5);
